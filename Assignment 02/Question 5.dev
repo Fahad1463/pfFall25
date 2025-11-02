@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <string.h>
+
+void toggleBits(char *msg)
+{
+    for(int i = 0; msg[i] != '\0'; i++)
+    {
+        msg[i] = msg[i] ^ (1 << 1);  // toggle 2nd bit
+        msg[i] = msg[i] ^ (1 << 4);  // toggle 5th bit
+    }
+}
+
+void reverseString(char *msg)
+{
+    int len = strlen(msg);
+    for(int i = 0; i < len/2; i++)
+    {
+        char temp = msg[i];
+        msg[i] = msg[len-i-1];
+        msg[len-i-1] = temp;
+    }
+}
+
+void encodeMessage()
+{
+    char msg[200];
+    printf("Enter message to encode: ");
+    scanf(" %[^\n]", msg);
+
+    reverseString(msg);
+    toggleBits(msg);
+
+    printf("\nEncoded message: %s\n", msg);
+}
+
+void decodeMessage()
+{
+    char msg[200];
+    printf("Enter message to decode: ");
+    scanf(" %[^\n]", msg);
+
+    toggleBits(msg);
+    reverseString(msg);
+
+    printf("\nDecoded message: %s\n", msg);
+}
+
+int main()
+{
+    int opt;
+    while(1)
+    {
+        printf("\n--- TCS Message Encoder/Decoder ---\n");
+        printf("1. Encode Message\n2. Decode Message\n3. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &opt);
+
+        switch(opt)
+        {
+            case 1: encodeMessage(); break;
+            case 2: decodeMessage(); break;
+            case 3: return 0;
+            default: printf("Invalid input\n");
+        }
+    }
+}
