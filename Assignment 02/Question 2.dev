@@ -1,0 +1,127 @@
+#include <stdio.h>
+#include <string.h>
+
+char customerName[50];
+char customerCNIC[20];
+
+char products[5][50] = {"Milk", "Bread", "Eggs", "Butter", "Juice"};
+float prices[5] = {120.5, 40.0, 10.0, 150.0, 80.0};
+int quantities[5] = {50, 100, 200, 30, 60};
+
+int cartQuantity[5] = {0};
+int opt;
+float totalBill = 0;
+
+void customerInfo()
+{
+    printf("\nEnter customer name: ");
+    scanf("%s", customerName);
+    printf("Enter CNIC number: ");
+    scanf("%s", customerCNIC);
+}
+
+void displayInventory()
+{
+    printf("\n--- Inventory ---\n");
+    for(int i = 0; i < 5; i++)
+    {
+        printf("%d. %s | Price: %.2f | Quantity: %d\n", i+1, products[i], prices[i], quantities[i]);
+    }
+}
+
+void addToCart()
+{
+    int item, qty;
+    printf("\nEnter product number to add to cart: ");
+    scanf("%d", &item);
+    if(item < 1 || item > 5)
+    {
+        printf("Invalid product number\n");
+        return;
+    }
+    printf("Enter quantity: ");
+    scanf("%d", &qty);
+    if(qty > quantities[item-1])
+    {
+        printf("Not enough stock\n");
+    }
+    else
+    {
+        cartQuantity[item-1] += qty;
+        quantities[item-1] -= qty;
+        printf("Added to cart\n");
+    }
+}
+
+void displayTotal()
+{
+    totalBill = 0;
+    for(int i = 0; i < 5; i++)
+    {
+        totalBill += cartQuantity[i] * prices[i];
+    }
+    printf("\nTotal bill without discount: %.2f\n", totalBill);
+
+    char code[20];
+    printf("Do you have a promocode? (Enter code or No): ");
+    scanf("%s", code);
+    if(strcmp(code, "Eid2025") == 0)
+    {
+        totalBill = totalBill * 0.75;
+        printf("Discount applied! New total: %.2f\n", totalBill);
+    }
+}
+
+void showInvoice()
+{
+    printf("\n--- Invoice ---\n");
+    printf("Customer: %s\n", customerName);
+    printf("CNIC: %s\n", customerCNIC);
+    printf("\nPurchased items:\n");
+    for(int i = 0; i < 5; i++)
+    {
+        if(cartQuantity[i] > 0)
+            printf("%s | Quantity: %d | Price: %.2f\n", products[i], cartQuantity[i], cartQuantity[i]*prices[i]);
+    }
+    printf("\nFinal Bill: %.2f\n", totalBill);
+}
+
+int main()
+{
+    while(1)
+    {
+        printf("\n--- Supermarket Menu ---\n");
+        printf("1. Customer Info\n");
+        printf("2. Display Inventory\n");
+        printf("3. Add Item to Cart\n");
+        printf("4. Display Total Bill\n");
+        printf("5. Show Invoice\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &opt);
+
+        switch(opt)
+        {
+            case 1:
+                customerInfo();
+                break;
+            case 2:
+                displayInventory();
+                break;
+            case 3:
+                addToCart();
+                break;
+            case 4:
+                displayTotal();
+                break;
+            case 5:
+                showInvoice();
+                break;
+            case 6:
+                printf("Exiting system...\n");
+                return 0;
+            default:
+                printf("Invalid input\n");
+        }
+    }
+}
